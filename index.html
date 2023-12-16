@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance</title>
+    <!-- Your HTML head content -->
+
+    <!-- Include your scripts and stylesheets -->
+    <script>
+        function recordAttendance() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const { latitude, longitude } = position.coords;
+
+                    try {
+                        const response = await fetch('/attendance', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ latitude, longitude })
+                        });
+
+                        if (response.ok) {
+                            console.log('Attendance recorded successfully');
+                        } else {
+                            console.error('Failed to record attendance');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            } else {
+                console.error('Geolocation is not supported by this browser');
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Your HTML body content -->
+
+    <!-- Example button to trigger attendance recording -->
+    <button onclick="recordAttendance()">Record Attendance</button>
+</body>
+</html>
